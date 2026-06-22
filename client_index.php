@@ -128,7 +128,7 @@ $studentId = $_SESSION['student_id'];
 
     async function fetchProfile() {
       try {
-        const res = await fetch('api.php?action=profile');
+        const res = await fetch('client_api.php?action=profile');
         if (!res.ok) throw new Error('Failed to fetch');
         const json = await res.json();
         if (!json.success) throw new Error(json.message);
