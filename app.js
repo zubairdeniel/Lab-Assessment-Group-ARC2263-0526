@@ -19,8 +19,8 @@ function showView(name) {
 
 async function fetchAndRender() {
   try {
-    const res = await fetch('api.php?action=list');
-    if (!res.ok) throw new Error('Failed to fetch');
+const res = await fetch('client_api.php?action=list');  
+  if (!res.ok) throw new Error('Failed to fetch');
     const json = await res.json();
     if (!json.success) throw new Error(json.message);
     filteredStudents = json.data || [];
