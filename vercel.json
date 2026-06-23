@@ -1,11 +1,9 @@
 {
-  "builds": [
-    { "src": "admin/*.php", "use": "vercel-php@0.9.0" },
-    { "src": "client/*.php", "use": "vercel-php@0.9.0" }
-  ],
+  "functions": {
+    "api/*.php": { "runtime": "vercel-php@0.9.0" },
+    "*.php": { "runtime": "vercel-php@0.9.0" }
+  },
   "routes": [
-    { "src": "/admin/(.*)", "dest": "/admin/$1" },
-    { "src": "/client/(.*)", "dest": "/client/$1" },
-    { "src": "/(.*)", "dest": "/client/login.html" }
+    { "src": "/(.*)", "dest": "index.php" }
   ]
 }
