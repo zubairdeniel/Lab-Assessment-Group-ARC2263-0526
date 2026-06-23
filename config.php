@@ -4,11 +4,11 @@
  * Railway MySQL
  */
 
-define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
-define('DB_NAME', getenv('DB_NAME') ?: 'studentbase');
-define('DB_USER', getenv('DB_USER') ?: 'root');
-define('DB_PASS', getenv('DB_PASS') ?: '');
-define('DB_PORT', getenv('DB_PORT') ?: '3306');
+define('DB_HOST', 'reseau.proxy.rlwy.net');   // Railway as host
+define('DB_NAME', 'studentbase');             // schema database
+define('DB_USER', 'root');                    // Railway username
+define('DB_PASS', 'ZUlYgxonZYfZQznYqsutWMjLsGyDBgNn');   //  password  Railway dashboard
+define('DB_PORT', '22393');                   // Railway port
 define('DB_CHAR', 'utf8mb4');
 
 function getDB(): PDO {
