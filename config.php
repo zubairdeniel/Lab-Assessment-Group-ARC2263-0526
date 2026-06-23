@@ -5,11 +5,10 @@
  */
 
 // 1. Pull connection credentials from environment variables
-$host     = $_ENV['DB_HOST'] ?? getenv('DB_HOST');
-$db_name  = $_ENV['DB_NAME'] ?? getenv('DB_NAME');
-$user     = $_ENV['DB_USER'] ?? getenv('DB_USER');
-$password = $_ENV['DB_PASS'] ?? getenv('DB_PASS');
-$port     = $_ENV['DB_PORT'] ?? getenv('DB_PORT') ?? '5432';
+"define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
+define('DB_NAME', getenv('DB_NAME') ?: 'studentbase');
+define('DB_USER', getenv('DB_USER') ?: 'root');
+define('DB_PASS', getenv('DB_PASS') ?: '');"
 
 try {
     // 2. Build the PostgreSQL Data Source Name (DSN) string
