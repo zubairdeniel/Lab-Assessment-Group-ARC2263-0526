@@ -24,10 +24,16 @@ function getDB(): PDO {
             PDO::ATTR_EMULATE_PREPARES   => false,
         ]);
     } catch (PDOException $e) {
-        header('Content-Type: text/plain');
-        echo "DATABASE ERROR: " . $e->getMessage();
-        exit;
-    }
+    http_response_code(500);
+    header('Content-Type: application/json');
+    echo json_encode([
+        'success' => false,
+        'message' => 'Database connection failed'
+        // optionally: 'error' => $e->getMessage() for debugging
+    ]);
+    exit;
+}
+
     
     return $pdo;
 }
