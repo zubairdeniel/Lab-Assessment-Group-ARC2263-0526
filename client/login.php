@@ -1,13 +1,6 @@
 <?php
 require_once __DIR__ . '/auth.php';
 require_once __DIR__ . '/../config.php';
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-session_start();
-header('Content-Type: application/json');
-
-
 
 header('Content-Type: application/json');
 
@@ -41,14 +34,7 @@ try {
     echo json_encode(['success' => true, 'redirect' => 'index.php']);
 } catch (Throwable $e) {
     http_response_code(500);
-    echo json_encode([} catch (Throwable $e) {
-    http_response_code(500);
-    echo json_encode([
-        'success' => false,
-        'message' => $e->getMessage()
-    ]);
+    echo json_encode(['success' => false, 'message' => $e->getMessage()]);
     exit;
 }
-
-    exit;
-}
+?>
