@@ -5,10 +5,11 @@
  */
 
 // 1. Pull connection credentials from environment variables
-"define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
+define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
 define('DB_NAME', getenv('DB_NAME') ?: 'studentbase');
-define('DB_USER', getenv('DB_USER') ?: 'root');
-define('DB_PASS', getenv('DB_PASS') ?: '');"
+define('DB_USER', getenv('DB_USER') ?: 'postgres');
+define('DB_PASS', getenv('DB_PASS') ?: '');
+define('DB_PORT', getenv('DB_PORT') ?: '5432');
 
 try {
     // 2. Build the PostgreSQL Data Source Name (DSN) string
