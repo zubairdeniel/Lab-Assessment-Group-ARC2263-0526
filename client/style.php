@@ -1,3 +1,7 @@
+<?php
+header("Content-Type: text/css; charset=UTF-8");
+?>
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
