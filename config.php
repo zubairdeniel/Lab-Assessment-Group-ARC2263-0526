@@ -1,7 +1,7 @@
 <?php
 /**
- * StudentBase — Database Connection Config
- * Switched to Supabase PostgreSQL
+ * StudentBase — Configuration & Database Connection
+ * Switched to Supabase PostgreSQL with Debug Mode
  */
 
 // 1. Pull connection credentials from environment variables
@@ -9,7 +9,7 @@ $host     = $_ENV['DB_HOST'] ?? getenv('DB_HOST');
 $db_name  = $_ENV['DB_NAME'] ?? getenv('DB_NAME');
 $user     = $_ENV['DB_USER'] ?? getenv('DB_USER');
 $password = $_ENV['DB_PASS'] ?? getenv('DB_PASS');
-$port     = $_ENV['DB_PORT'] ?? getenv('DB_PORT') ?? '5432'; // Defaults to 5432 for Postgres
+$port     = $_ENV['DB_PORT'] ?? getenv('DB_PORT') ?? '5432';
 
 try {
     // 2. Build the PostgreSQL Data Source Name (DSN) string
@@ -23,7 +23,9 @@ try {
     ]);
 
 } catch (PDOException $e) {
-    // Prevent sensitive database credentials from leaking on the screen if it fails
-    error_log("Database connection failed: " . $e->getMessage());
-    die("Application connection error. Please contact the administrator.");
+    // Force the network response to show the exact system error
+    header('Content-Type: text/plain');
+    echo "DATABASE DEBUG ERROR:\n";
+    echo $e->getMessage();
+    exit;
 }
