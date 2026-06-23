@@ -1,6 +1,9 @@
 <?php
 require_once __DIR__ . '/auth.php';
 require_once __DIR__ . '/../config.php';
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 header('Content-Type: application/json');
 
@@ -18,7 +21,8 @@ try {
     $db = getDB();
     $st = $db->prepare('SELECT id, student_number, first_name, last_name, password FROM students WHERE student_number = ?');
     $st->execute([$studentNum]);
-    $student = $st->fetch();
+    $student = $st->fetch(PDO::FETCH_ASSOC);
+
 
     if (!$student || !password_verify($password, $student['password'] ?? '')) {
         http_response_code(401);
@@ -32,7 +36,10 @@ try {
     $_SESSION['student_name'] = $student['first_name'] . ' ' . $student['last_name'];
 
     echo json_encode(['success' => true, 'redirect' => 'index.php']);
+} try {
+    $db = getDB();
 } catch (Throwable $e) {
     http_response_code(500);
-    echo json_encode(['success' => false, 'message' => 'Server error']);
+    echo json_encode(['success' => false, 'message' => 'DB connection failed', 'error' => $e->getMessage()]);
+    exit;
 }
