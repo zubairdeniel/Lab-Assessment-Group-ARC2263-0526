@@ -1,0 +1,204 @@
+<?php
+require_once __DIR__ . '/auth.php';
+require_admin_session();
+$adminName = htmlspecialchars($_SESSION['admin_name'] ?? 'Admin');
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>StudentBase — Admin Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand">
+        <span class="brand-icon">⬡</span>
+        <span class="brand-name">StudentBase <span class="badge-admin">Admin</span></span>
+      </div>
+      <nav class="header-nav">
+        <button class="nav-btn active" data-view="list" onclick="showView('list')">All Students</button>
+        <button class="nav-btn" data-view="add" onclick="showView('add')">+ Add Student</button>
+        <span class="header-divider"></span>
+        <span class="admin-name"><?= $adminName ?></span>
+        <a href="logout.php" class="nav-btn nav-btn-logout">Logout</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main-content">
+
+    <!-- LIST VIEW -->
+    <section id="view-list" class="view active">
+      <div class="section-header">
+        <div>
+          <h1 class="section-title">Student Records</h1>
+          <p class="section-sub">Manage and view all enrolled students</p>
+        </div>
+        <div class="search-wrap">
+          <input type="text" id="searchInput" placeholder="Search by name or ID…" oninput="filterTable()" />
+          <span class="search-icon">⌕</span>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table id="studentTable">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Full Name</th>
+              <th>Email</th>
+              <th>Course</th>
+              <th>Year</th>
+              <th>GPA</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="studentBody"></tbody>
+        </table>
+        <div id="emptyState" class="empty-state hidden">
+          <span class="empty-icon">◫</span>
+          <p>No students found.</p>
+        </div>
+      </div>
+
+      <div class="pagination" id="pagination"></div>
+    </section>
+
+    <!-- ADD / EDIT FORM VIEW -->
+    <section id="view-add" class="view">
+      <div class="section-header">
+        <div>
+          <h1 class="section-title" id="formTitle">Add New Student</h1>
+          <p class="section-sub">Fill in the details below</p>
+        </div>
+        <button class="btn-ghost" onclick="showView('list')">← Back</button>
+      </div>
+
+      <form id="studentForm" class="student-form" novalidate onsubmit="handleSubmit(event)">
+        <input type="hidden" id="studentId" name="id" value="">
+
+        <div class="form-grid">
+          <div class="form-section">
+            <h3 class="form-section-title">Personal Info</h3>
+            <div class="field-row">
+              <div class="field">
+                <label>First Name <span class="req">*</span></label>
+                <input type="text" id="firstName" maxlength="50"/>
+                <span class="field-error" id="err-firstName"></span>
+              </div>
+              <div class="field">
+                <label>Last Name <span class="req">*</span></label>
+                <input type="text" id="lastName" maxlength="50"/>
+                <span class="field-error" id="err-lastName"></span>
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label>Date of Birth <span class="req">*</span></label>
+                <input type="date" id="dob"/>
+                <span class="field-error" id="err-dob"></span>
+              </div>
+              <div class="field">
+                <label>Gender <span class="req">*</span></label>
+                <select id="gender">
+                  <option value="">— Select —</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </select>
+                <span class="field-error" id="err-gender"></span>
+              </div>
+            </div>
+            <div class="field">
+              <label>Address</label>
+              <textarea id="address" rows="2"></textarea>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <h3 class="form-section-title">Contact & Academic</h3>
+            <div class="field">
+              <label>Email <span class="req">*</span></label>
+              <input type="email" id="email"/>
+              <span class="field-error" id="err-email"></span>
+            </div>
+            <div class="field">
+              <label>Phone <span class="req">*</span></label>
+              <input type="tel" id="phone" maxlength="25"/>
+              <span class="field-error" id="err-phone"></span>
+            </div>
+            <div class="field">
+              <label>Student Number <span class="req">*</span></label>
+              <input type="text" id="studentNum" maxlength="20"/>
+              <span class="field-error" id="err-studentNum"></span>
+            </div>
+            <div class="field">
+              <label>Course <span class="req">*</span></label>
+              <select id="course">
+                <option value="">— Select —</option>
+                <option>Computer Science</option>
+                <option>Data Science</option>
+                <option>Engineering</option>
+              </select>
+              <span class="field-error" id="err-course"></span>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label>Year <span class="req">*</span></label>
+                <select id="yearLevel">
+                  <option value="">— Select —</option>
+                  <option value="1">Year 1</option>
+                  <option value="2">Year 2</option>
+                  <option value="3">Year 3</option>
+                </select>
+                <span class="field-error" id="err-yearLevel"></span>
+              </div>
+              <div class="field">
+                <label>Status <span class="req">*</span></label>
+                <select id="status">
+                  <option value="">— Select —</option>
+                  <option value="Active">Active</option>
+                  <option value="Inactive">Inactive</option>
+                </select>
+                <span class="field-error" id="err-status"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn-ghost" onclick="resetForm()">Reset</button>
+          <button type="submit" class="btn-primary"><span id="submitLabel">Add Student</span></button>
+        </div>
+        <div id="formMsg" class="form-msg hidden"></div>
+      </form>
+    </section>
+
+    <!-- DELETE MODAL -->
+    <div id="deleteModal" class="modal-overlay hidden">
+      <div class="modal-box">
+        <h2>Delete Student?</h2>
+        <p>This cannot be undone.</p>
+        <div class="modal-actions">
+          <button class="btn-ghost" onclick="closeModal()">Cancel</button>
+          <button class="btn-danger" onclick="confirmDelete()">Delete</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>StudentBase Admin &copy; 2025</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

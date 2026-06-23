@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin Login — StudentBase</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="login-body">
+  <div class="login-wrap">
+    <div class="login-card">
+      <div class="login-brand">
+        <span class="brand-icon">⬡</span>
+        <span class="brand-name">StudentBase</span>
+      </div>
+      <p class="login-sub">Admin Portal</p>
+
+      <form id="loginForm" class="login-form" onsubmit="handleLogin(event)">
+        <div class="field">
+          <label>Username</label>
+          <input type="text" id="username" placeholder="admin" autocomplete="username" autofocus>
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <input type="password" id="password" placeholder="••••••••" autocomplete="current-password">
+        </div>
+        <div id="loginError" class="login-error hidden"></div>
+        <button type="submit" class="btn-primary btn-block" id="loginBtn">Sign In</button>
+      </form>
+
+      <p class="login-hint">Demo: <span class="ff-mono">admin</span> / <span class="ff-mono">Admin@123</span></p>
+    </div>
+  </div>
+
+  <script>
+    async function handleLogin(e) {
+      e.preventDefault();
+      const btn = document.getElementById('loginBtn');
+      const err = document.getElementById('loginError');
+      err.classList.add('hidden');
+
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+
+      if (!username || !password) {
+        err.textContent = 'Please enter username and password';
+        err.classList.remove('hidden');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Signing in…';
+
+      try {
+        const res = await fetch('login.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        const json = await res.json();
+        if (!json.success) throw new Error(json.message);
+        window.location.href = json.redirect;
+      } catch (e) {
+        err.textContent = e.message;
+        err.classList.remove('hidden');
+        btn.disabled = false;
+        btn.textContent = 'Sign In';
+      }
+    }
+  </script>
+</body>
+</html>
