@@ -40,7 +40,7 @@ try {
     $_SESSION['student_name'] = $student['first_name'] . ' ' . $student['last_name'];
 
     echo json_encode(['success' => true, 'redirect' => 'index.php']);
-
+}
 } catch (Throwable $e) {
     http_response_code(500);
     echo json_encode(['success' => false, 'message' => 'DB connection failed', 'error' => $e->getMessage()]);
