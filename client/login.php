@@ -41,6 +41,14 @@ try {
     echo json_encode(['success' => true, 'redirect' => 'index.php']);
 } catch (Throwable $e) {
     http_response_code(500);
-    echo json_encode(['success' => false, 'message' => 'DB connection failed', 'error' => $e->getMessage()]);
+    echo json_encode([} catch (Throwable $e) {
+    http_response_code(500);
+    echo json_encode([
+        'success' => false,
+        'message' => $e->getMessage()
+    ]);
+    exit;
+}
+
     exit;
 }
