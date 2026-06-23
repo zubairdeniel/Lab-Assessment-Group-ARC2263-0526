@@ -1,23 +1,29 @@
 <?php
 /**
- * StudentBase — config.php
- * Shared database configuration with Vercel support.
+ * StudentBase — Database Connection Config
+ * Switched to Supabase PostgreSQL
  */
 
-// Use Vercel's environment variables if they exist, otherwise fallback to local XAMPP settings
-define('DB_HOST', $_ENV['DB_HOST'] ?? $_SERVER['DB_HOST'] ?? 'localhost');
-define('DB_NAME', $_ENV['DB_NAME'] ?? $_SERVER['DB_NAME'] ?? 'studentbase');
-define('DB_USER', $_ENV['DB_USER'] ?? $_SERVER['DB_USER'] ?? 'root');
-define('DB_PASS', $_ENV['DB_PASS'] ?? $_SERVER['DB_PASS'] ?? '');
-define('DB_CHAR', 'utf8mb4');
+// 1. Pull connection credentials from environment variables
+$host     = $_ENV['DB_HOST'] ?? getenv('DB_HOST');
+$db_name  = $_ENV['DB_NAME'] ?? getenv('DB_NAME');
+$user     = $_ENV['DB_USER'] ?? getenv('DB_USER');
+$password = $_ENV['DB_PASS'] ?? getenv('DB_PASS');
+$port     = $_ENV['DB_PORT'] ?? getenv('DB_PORT') ?? '5432'; // Defaults to 5432 for Postgres
 
-function getDB(): PDO {
-    static $pdo = null;
-    if ($pdo) return $pdo;
-    $dsn = 'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=' . DB_CHAR;
-    return new PDO($dsn, DB_USER, DB_PASS, [
+try {
+    // 2. Build the PostgreSQL Data Source Name (DSN) string
+    $dsn = "pgsql:host=$host;port=$port;dbname=$db_name";
+
+    // 3. Establish connection with robust error configurations
+    $pdo = new PDO($dsn, $user, $password, [
         PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         PDO::ATTR_EMULATE_PREPARES   => false,
     ]);
+
+} catch (PDOException $e) {
+    // Prevent sensitive database credentials from leaking on the screen if it fails
+    error_log("Database connection failed: " . $e->getMessage());
+    die("Application connection error. Please contact the administrator.");
 }
