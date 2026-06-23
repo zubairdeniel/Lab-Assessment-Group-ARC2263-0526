@@ -16,7 +16,7 @@ if ($studentNum === '' || $password === '') {
 
 try {
     $db = getDB();
-    $st = $db->prepare('SELECT id, student_number, first_name, last_name FROM students WHERE student_number = ?');
+    $st = $db->prepare('SELECT id, student_number, first_name, last_name, password FROM students WHERE student_number = ?');
     $st->execute([$studentNum]);
     $student = $st->fetch();
 
