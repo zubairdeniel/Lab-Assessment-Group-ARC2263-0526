@@ -7,6 +7,15 @@ let deleteTargetId = null;
 
 document.addEventListener('DOMContentLoaded', () => {
   fetchAndRender();
+
+  // Fix: Add Student button resets form
+  const addBtn = document.getElementById('addStudentBtn');
+  if (addBtn) {
+    addBtn.addEventListener('click', () => {
+      resetForm();
+      showView('add');
+    });
+  }
 });
 
 function showView(name) {
@@ -85,9 +94,6 @@ function renderPagination(total) {
 
 function filterTable() {
   const q = document.getElementById('searchInput').value.toLowerCase().trim();
-  const all = [];
-  
-  // Fetch from server with search
   fetch(`api.php?action=list&search=${encodeURIComponent(q)}`)
     .then(r => r.json())
     .then(json => {
@@ -235,15 +241,23 @@ function setError(fieldId, msg) {
   const err = document.getElementById(`err-${fieldId}`);
   el.classList.add('error');
   if (err) err.textContent = msg;
-}
+  }
 
 function clearErrors() {
   document.querySelectorAll('.field-error').forEach(e => e.textContent = '');
   document.querySelectorAll('.error').forEach(e => e.classList.remove('error'));
 }
 
-function v(id) { return document.getElementById(id).value.trim(); }
-function esc(str) { return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function v(id) { 
+  return document.getElementById(id).value.trim(); 
+}
+
+function esc(str) { 
+  return String(str || '')
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;'); 
+}
 
 function showMsg(type, text) {
   const box = document.getElementById('formMsg');
