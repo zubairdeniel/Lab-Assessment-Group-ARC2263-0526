@@ -39,7 +39,7 @@ function adminList(PDO $db): void {
 
     $whereSql = $where ? 'WHERE ' . implode(' AND ', $where) : '';
     $countSql = "SELECT COUNT(*) FROM students $whereSql";
-    $dataSql = "SELECT id, student_number, first_name, last_name, email, phone, course, year_level, gpa, status FROM students $whereSql ORDER BY id DESC LIMIT $perPage OFFSET $offset";
+    $dataSql = "SELECT id, student_number, first_name, last_name, dob, gender, address, email, phone, course, year_level, gpa, status FROM students $whereSql ORDER BY id DESC LIMIT $perPage OFFSET $offset";
 
     $st = $db->prepare($countSql);
     $st->execute($params);
@@ -59,10 +59,10 @@ function adminCreate(PDO $db): void {
 
     $sql = "INSERT INTO students
               (student_number, first_name, last_name, dob, gender, address,
-               email, phone, course, year_level, status)
+               email, phone, course, year_level, gpa, status)
             VALUES
               (:student_number,:first_name,:last_name,:dob,:gender,:address,
-               :email,:phone,:course,:year_level,:status)";
+               :email,:phone,:course,:year_level,:gpa,:status)";
 
     $fields = [
         'student_number' => trim($data['student_number'] ?? ''),
@@ -75,6 +75,7 @@ function adminCreate(PDO $db): void {
         'phone'          => trim($data['phone'] ?? ''),
         'course'         => trim($data['course'] ?? ''),
         'year_level'     => (int)($data['year_level'] ?? 1),
+        'gpa'            => isset($data['gpa']) && $data['gpa'] !== '' ? (float)$data['gpa'] : null,
         'status'         => trim($data['status'] ?? 'Active'),
     ];
 
@@ -101,6 +102,7 @@ function adminUpdate(PDO $db): void {
                phone = :phone,
                course = :course,
                year_level = :year_level,
+               gpa = :gpa,
                status = :status
             WHERE id = :id";
 
@@ -116,6 +118,7 @@ function adminUpdate(PDO $db): void {
         'phone'          => trim($data['phone'] ?? ''),
         'course'         => trim($data['course'] ?? ''),
         'year_level'     => (int)($data['year_level'] ?? 1),
+        'gpa'            => isset($data['gpa']) && $data['gpa'] !== '' ? (float)$data['gpa'] : null,
         'status'         => trim($data['status'] ?? 'Active'),
     ];
 
@@ -175,4 +178,3 @@ function json(array $payload, int $code = 200): void {
 function jsonError(string $msg, int $code = 400): void {
     json(['success' => false, 'message' => $msg], $code);
 }
-
