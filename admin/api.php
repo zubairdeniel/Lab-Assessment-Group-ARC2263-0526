@@ -31,15 +31,6 @@ function adminList(PDO $db): void {
     $where = [];
     $params = [];
 
-    function adminList(PDO $db): void {
-    $search = trim($_GET['search'] ?? '');
-    $page = max(1, (int)($_GET['page'] ?? 1));
-    $perPage = min(100, max(1, (int)($_GET['per_page'] ?? 50)));
-    $offset = ($page - 1) * $perPage;
-
-    $where = [];
-    $params = [];
-
     if ($search !== '') {
         $like = "%{$search}%";
         $where[] = '(CONCAT(first_name," ",last_name) LIKE ? OR student_number LIKE ?)';
@@ -48,11 +39,7 @@ function adminList(PDO $db): void {
 
     $whereSql = $where ? 'WHERE ' . implode(' AND ', $where) : '';
     $countSql = "SELECT COUNT(*) FROM students $whereSql";
-    $dataSql = "SELECT id, student_number, first_name, last_name, dob, gender, address,
-                       email, phone, course, year_level, gpa, status
-                FROM students $whereSql
-                ORDER BY id DESC
-                LIMIT $perPage OFFSET $offset";
+    $dataSql = "SELECT id, student_number, first_name, last_name, email, phone, course, year_level, gpa, status FROM students $whereSql ORDER BY id DESC LIMIT $perPage OFFSET $offset";
 
     $st = $db->prepare($countSql);
     $st->execute($params);
@@ -60,11 +47,10 @@ function adminList(PDO $db): void {
 
     $st2 = $db->prepare($dataSql);
     $st2->execute($params);
-    $rows = $st2->fetchAll(PDO::FETCH_ASSOC);
+    $rows = $st2->fetchAll();
 
     json(['success' => true, 'total' => $total, 'page' => $page, 'data' => $rows]);
 }
-
 
 function adminCreate(PDO $db): void {
     $data = readBody();
@@ -189,3 +175,4 @@ function json(array $payload, int $code = 200): void {
 function jsonError(string $msg, int $code = 400): void {
     json(['success' => false, 'message' => $msg], $code);
 }
+
