@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>StudentBase — Sign In</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #F0F4F8;
+      --surface:   #FFFFFF;
+      --border:    #C5D4E3;
+      --text:      #0D1B2A;
+      --text-muted:#5A7087;
+      --accent:    #1A5BA0;
+      --accent-dk: #0F3D6E;
+      --accent-lt: #E8F0FA;
+      --gold:      #F4C430;
+      --radius:    6px;
+      --shadow:    0 2px 12px rgba(13,27,42,.09);
+      --ff-body:   'DM Sans', sans-serif;
+      --ff-mono:   'DM Mono', monospace;
+    }
+
+    html { font-size: 15px; }
+    body {
+      background: linear-gradient(135deg, var(--accent-dk) 0%, var(--accent) 100%);
+      color: var(--text);
+      font-family: var(--ff-body);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .wrap { width: 100%; max-width: 560px; }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .65rem;
+      margin-bottom: .5rem;
+    }
+    .brand-icon { font-size: 1.9rem; color: var(--gold); }
+    .brand-name { font-size: 1.6rem; font-weight: 700; color: #fff; letter-spacing: .04em; }
+
+    .tagline {
+      text-align: center;
+      color: rgba(255,255,255,.8);
+      font-size: .9rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .card {
+      background: var(--surface);
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.3);
+      padding: 2.5rem;
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--accent-dk);
+      margin-bottom: .35rem;
+    }
+    .card-sub {
+      color: var(--text-muted);
+      font-size: .88rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .role-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .role-link {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem 1.25rem;
+      text-align: left;
+      transition: border-color .15s, background .15s, transform .1s;
+    }
+    .role-link:hover {
+      border-color: var(--accent);
+      background: var(--accent-lt);
+      transform: translateY(-2px);
+    }
+    .role-link:focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .role-icon {
+      font-size: 1.6rem;
+      color: var(--accent);
+      display: block;
+      margin-bottom: .75rem;
+    }
+    .role-name {
+      font-weight: 700;
+      font-size: .98rem;
+      color: var(--accent-dk);
+      margin-bottom: .25rem;
+    }
+    .role-desc {
+      font-size: .8rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .footer-note {
+      text-align: center;
+      color: rgba(255,255,255,.65);
+      font-size: .78rem;
+      margin-top: 1.75rem;
+    }
+    .ff-mono { font-family: var(--ff-mono); }
+
+    @media (max-width: 480px) {
+      .role-grid { grid-template-columns: 1fr; }
+      .card { padding: 1.75rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrap">
+    <div class="brand">
+      <span class="brand-icon">⬡</span>
+      <span class="brand-name">StudentBase</span>
+    </div>
+    <p class="tagline">Choose how you'd like to sign in</p>
+
+    <div class="card">
+      <h1 class="card-title">Welcome back</h1>
+      <p class="card-sub">Select your role to continue to the right sign-in page.</p>
+
+      <div class="role-grid">
+        <a class="role-link" href="admin/login.html">
+          <span class="role-icon">⬡</span>
+          <span class="role-name">Student Records Member</span>
+          <span class="role-desc">Staff access to manage student records.</span>
+        </a>
+        <a class="role-link" href="client/login.html">
+          <span class="role-icon">◫</span>
+          <span class="role-name">Student</span>
+          <span class="role-desc">View your own enrollment and records.</span>
+        </a>
+      </div>
+    </div>
+
+    <p class="footer-note">StudentBase <span class="ff-mono">&copy; 2025</span></p>
+  </div>
+
+</body>
+</html>
