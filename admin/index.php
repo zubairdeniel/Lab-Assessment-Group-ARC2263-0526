@@ -23,7 +23,7 @@ $adminName = htmlspecialchars($_SESSION['admin_name'] ?? 'Admin');
       </div>
       <nav class="header-nav">
         <button class="nav-btn active" data-view="list" onclick="showView('list')">All Students</button>
-        <button class="nav-btn" data-view="add" onclick="showView('add')">+ Add Student</button>
+        <button class="nav-btn" data-view="add" onclick="resetForm(); showView('add')">+ Add Student</button>    
         <span class="header-divider"></span>
         <span class="admin-name"><?= $adminName ?></span>
         <a href="logout.php" class="nav-btn nav-btn-logout">Logout</a>
@@ -146,6 +146,8 @@ $adminName = htmlspecialchars($_SESSION['admin_name'] ?? 'Admin');
                 <option>Computer Science</option>
                 <option>Data Science</option>
                 <option>Engineering</option>
+                <option>Information Technology</option>
+                <option>Business Administration</option>
               </select>
               <span class="field-error" id="err-course"></span>
             </div>
@@ -166,8 +168,15 @@ $adminName = htmlspecialchars($_SESSION['admin_name'] ?? 'Admin');
                   <option value="">— Select —</option>
                   <option value="Active">Active</option>
                   <option value="Inactive">Inactive</option>
+                  <option value="Graduated">Graduated</option>
+                  <option value="Suspended">Suspended</option>
                 </select>
                 <span class="field-error" id="err-status"></span>
+                <div class="field">
+                <label>GPA</label>
+                <input type="number" id="gpa" step="0.01" min="0" max="4">
+                <span class="field-error" id="err-gpa"></span>
+                </div>
               </div>
             </div>
           </div>
