@@ -59,10 +59,12 @@ function adminCreate(PDO $db): void {
 
     $sql = "INSERT INTO students
               (student_number, first_name, last_name, dob, gender, address,
-               email, phone, course, year_level, gpa, status)
+               email, phone, course, year_level, gpa, status, password)
             VALUES
               (:student_number,:first_name,:last_name,:dob,:gender,:address,
-               :email,:phone,:course,:year_level,:gpa,:status)";
+               :email,:phone,:course,:year_level,:gpa,:status,:password)";
+
+    $plainPassword = trim($data['password'] ?? '') !== '' ? trim($data['password']) : 'Student@123';
 
     $fields = [
         'student_number' => trim($data['student_number'] ?? ''),
@@ -77,6 +79,7 @@ function adminCreate(PDO $db): void {
         'year_level'     => (int)($data['year_level'] ?? 1),
         'gpa'            => isset($data['gpa']) && $data['gpa'] !== '' ? (float)$data['gpa'] : null,
         'status'         => trim($data['status'] ?? 'Active'),
+        'password'       => password_hash($plainPassword, PASSWORD_DEFAULT),
     ];
 
     $st = $db->prepare($sql);
