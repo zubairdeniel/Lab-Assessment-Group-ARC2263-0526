@@ -115,6 +115,7 @@ function startEdit(id) {
   document.getElementById('studentNum').value = s.student_number || '';
   document.getElementById('course').value = s.course || '';
   document.getElementById('yearLevel').value = s.year_level || '';
+  document.getElementById('gpa').value = s.gpa ?? '';
   document.getElementById('status').value = s.status || 'Active';
 
   document.getElementById('formTitle').textContent = 'Edit Student';
@@ -170,6 +171,7 @@ async function handleSubmit(e) {
     student_number: v('studentNum'),
     course: v('course'),
     year_level: parseInt(v('yearLevel')) || null,
+    gpa: v('gpa') ? parseFloat(v('gpa')) : null,
     status: v('status'),
   };
 
